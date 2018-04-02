@@ -6,28 +6,17 @@ from django.http import HttpResponse, JsonResponse
 import datetime
 
 from dashboard.location import *
+from dashboard.keys import KEYS
 
-API_DATA = dict()
+from dashboard import wunderground
 
-def wunderground(request):
-    global API_DATA
-    req = dict()
-    req['data'] = request.GET.get('data', 'temperature')
-    req['address'] = request.GET.get('address', '')
-    req['latlng'] = request.GET.get('latlng', '')
-    loc = location(req)
+def get(url):
+    resp = urllib.request.urlopen(url).read()
+    return json.loads(resp)
 
-    if 'wunderground_' + loc['formatted_address'] in API_DATA:
-        data = API_DATA
-    else:
-        data = {
-            'time': repr(datetime.datetime.now()),
-            'req': req,
-            'data': req['data'].split(','),
-            'location': loc,
-        }
-        API_DATA['wunderground' + loc['formatted_address']] = data
-    return JsonResponse(data)
+
+def weather(request):
+    return JsonResponse(wunderground.wunderground(request))
 
 
 def home(request):

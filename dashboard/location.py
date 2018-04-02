@@ -61,6 +61,15 @@ def ip_lookup():
                                     ret['location']['lng'])
     return LOCATION["ip"]
 
+def lat(location):
+    return location['geometry']['location']['lat']
+
+def lng(location):
+    return location['geometry']['location']['lng']
+
+def fmt(location):
+    return location['formatted_address']
+
 
 def location(request):
     if isinstance(request, str):
