@@ -13,7 +13,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('location', 'wakatime', 'wunderground', 'github', 'travis')
+        fields = ('location', 'google', 'wakatime', 'wunderground')
 
 
 class RegisterForm(UserCreationForm):

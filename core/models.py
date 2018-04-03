@@ -7,10 +7,11 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=30, blank=True)
+    google = models.CharField(max_length=100, blank=True)
     wakatime = models.CharField(max_length=100, blank=True)
     wunderground = models.CharField(max_length=100, blank=True)
-    github = models.CharField(max_length=100, blank=True)
-    travis = models.CharField(max_length=100, blank=True)
+    # github = models.CharField(max_length=100, blank=True)
+    # travis = models.CharField(max_length=100, blank=True)
 
 
 @receiver(post_save, sender=User)

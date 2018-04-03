@@ -2,7 +2,6 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 
 from core import forms
 
@@ -19,7 +18,10 @@ def register_user(request):
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
             return JsonResponse({"success": True})
-        return JsonResponse({"success": False, "error": register_form.error_messages})
+        return JsonResponse({
+            "success": False,
+            "error": register_form.error_messages
+        })
     return JsonResponse({"success": False, "error": "Not a POST request"})
 
 
@@ -67,4 +69,16 @@ def update_profile(request):
             profile_form.save()
             return JsonResponse({"updated": True})
         return JsonResponse({"updated": False, "error": "Unknonwn error"})
-    return JsonResponse({"updated": False, "error": "Not a POST request"})
+    return JsonResponse({
+        "user": {
+            "username": request.user.username,
+            "email": request.user.email,
+            "first_name": request.user.first_name,
+            "last_name": request.user.last_name
+        },
+        "profile": {
+            "location": request.user.profile.location,
+            "wakatime_api": request.user.profile.wakatime,
+            "wunderground_api": request.user.profile.wunderground,
+        }
+    })
