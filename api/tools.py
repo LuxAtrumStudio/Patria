@@ -46,14 +46,22 @@ def find(term, obj):
 def generate_data_set(set_term, data_terms, obj):
     base = find(set_term, obj)
     data = list()
-    if base is None or not isinstance(base, list):
+    if base is None:
         return []
-    for _ in base:
-        entry = dict()
+    if isinstance(base, list):
+        for _ in base:
+            entry = dict()
+            for dt in data_terms:
+                if isinstance(dt, str):
+                    entry[dt.split('.')[-1]] = find(dt, _)
+                elif isinstance(dt, tuple):
+                    entry[dt[0]] = find(dt[1], _)
+            data.append(entry)
+    elif isinstance(base, dict):
+        data = dict()
         for dt in data_terms:
             if isinstance(dt, str):
-                entry[dt.split('.')[-1]] = find(dt, _)
+                data[dt.split('.')[-1]] = find(dt, base)
             elif isinstance(dt, tuple):
-                entry[dt[0]] = find(dt[1], _)
-        data.append(entry)
+                data[dt[0]] = find(dt[1], base)
     return data

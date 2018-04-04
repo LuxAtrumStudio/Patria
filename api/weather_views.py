@@ -85,6 +85,8 @@ def format_request(req_string):
         else:
             base_path = st
         key_list = key_string.split('-')
+        if key_list and key_list[0] == str():
+            key_list = list()
         request_list.append(((base_path.split('.')[-1], base_path), key_list))
     return request_list
 
@@ -118,7 +120,7 @@ def weather(request):
 
 @csrf_exempt
 @login_required
-def weather_daily(request):
+def weather_hourly(request):
     features = ['hourly10day']
     req_data = [(('hourly', 'hourly10day'),
                  [('time', 'FCTTIME.civil'), ('day', 'FCTTIME.weekday_name'),
@@ -126,6 +128,33 @@ def weather_daily(request):
                   ('fahrenheit', 'temp.english'), ('celsius', 'temp.metric'),
                   ('sky', 'sky'), ('humidity', 'humidity'), ('percip',
                                                              'pop')])]
+    local = location.location(request.user.profile.location,
+                              request.user.profile.google)
+    return JsonResponse(execute_request(features, req_data, local, request))
+
+
+@csrf_exempt
+@login_required
+def weather_conditions(request):
+    features = ['conditions']
+    req_data = [(('conditions', 'conditions'),
+                 [('location',
+                   'display_location.full'), ('fahrenheit',
+                                              'temp_f'), ('celsius', 'temp_c'),
+                  ('wind_dir', 'wind_degrees'), ('wind_mph', 'wind_mph'),
+                  ('wind_kph', 'wind_kph'), ('visibility_mi', 'visibility_mi'),
+                  ('visibility_km', 'visibility_km'), ('uv', 'UV'), ('icon',
+                                                                     'icon')])]
+    local = location.location(request.user.profile.location,
+                              request.user.profile.google)
+    return JsonResponse(execute_request(features, req_data, local, request))
+
+
+@csrf_exempt
+@login_required
+def weather_astonomy(request):
+    features = ['astronomy']
+    req_data = [(('astronomy', 'astronomy'), [])]
     local = location.location(request.user.profile.location,
                               request.user.profile.google)
     return JsonResponse(execute_request(features, req_data, local, request))
