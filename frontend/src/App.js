@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import './App.css';
-import Clock from './clock.js';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom'
+import Home from './views/Home';
+import Login from './views/Login';
 
-class App extends Component {
-  render() {
-    return (
-      <div class="mdl-grid">
-        <div className="mdl-layout-spacer"></div>
-        <Clock />
-        <div className="mdl-layout-spacer"></div>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="root">
+    <Switch>
+      <Route exact path='/' component={Home}/>
+      <Route exact path='/accounts/login' component={Login}/>
+      {/* <Route path='/schedule' component={Schedule}/> */}
+    </Switch>
+  </div>
+)
 
 export default App;

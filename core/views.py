@@ -1,10 +1,16 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from core import forms
 
+def get_post_data(request):
+    data = dict()
+    for key, value in request.POST.items():
+        data[key] = value
+    return data
 
 @csrf_exempt
 def register_user(request):
@@ -34,7 +40,9 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return JsonResponse({"success": True, "username": username})
-        return JsonResponse({"success": False, "username": username})
+        return JsonResponse({"success": False, "username": username, "data": get_post_data(request)})
+    else:
+        return TemplateResponse(request, 'index.html')
     return JsonResponse({
         "success": False,
         "username": request.GET.get('username', ''),

@@ -1,4 +1,5 @@
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.decorators import login_required
 import urllib.request
 import json
 
@@ -62,6 +63,7 @@ def fmt(location):
     return location['formatted_address']
 
 
+@login_required
 def location(request, key=None):
     if isinstance(request, str):
         if request == str():
