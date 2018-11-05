@@ -10,8 +10,8 @@ class Profile(models.Model):
     google = models.CharField(max_length=100, blank=True)
     wakatime = models.CharField(max_length=100, blank=True)
     wunderground = models.CharField(max_length=100, blank=True)
-    # github = models.CharField(max_length=100, blank=True)
-    # travis = models.CharField(max_length=100, blank=True)
+    github = models.CharField(max_length=100, blank=True)
+    travis = models.CharField(max_length=100, blank=True)
 
 
 @receiver(post_save, sender=User)

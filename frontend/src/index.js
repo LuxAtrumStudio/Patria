@@ -13,9 +13,4 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('body')
 );
-// ReactDOM.render(<App />, document.getElementById('body'));
-// ReactDOM.render(
-//   <Router history={browserHistory} routes={routes} />,
-//   document.querySelector('#app')
-// )
 registerServiceWorker();

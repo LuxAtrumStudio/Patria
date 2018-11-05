@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 import urllib.request
 import json
 
@@ -63,7 +64,7 @@ def fmt(location):
     return location['formatted_address']
 
 
-@login_required
+@csrf_exempt
 def location(request, key=None):
     if isinstance(request, str):
         if request == str():
@@ -78,17 +79,28 @@ def location(request, key=None):
             return lat_lng_lookup(request['latlng'].split(',')[0],
                                   request['latlng'].split(',')[1], key)
     else:
-        address = request.GET.get('address', '')
-        latlng = request.GET.get('latlng', '')
+        if request.method == "GET":
+            address = request.GET.get('address', '')
+            latlng = request.GET.get('latlng', '')
+            key = request.GET.get('key', '')
+        else:
+            address = request.POST.get('address', '')
+            latlng = request.POST.get('latlng', '')
+            key = request.POST.get('key', '')
+        if key == str():
+            key = request.user.profile.google
+            # return JsonResponse({"key": key, "method": request.method}) 
+        if request.user.profile.location != str() and address == str():
+            address = request.user.profile.location
         if address != str():
             return JsonResponse(
-                address_lookup(address, request.user.profile.google))
+                address_lookup(address, key))
         elif latlng != str():
             return JsonResponse(
                 lat_lng_lookup(
                     latlng.split(',')[0],
-                    latlng.split(',')[1], request.user.profile.google))
-    return JsonResponse(ip_lookup(request.user.profile.google))
+                    latlng.split(',')[1], key))
+    return JsonResponse(ip_lookup(key))
 
 
 def location_list(request):

@@ -2,8 +2,8 @@ import React, {
   Component
 } from 'react';
 import {
-  withRouter
-} from 'react-router'
+  Link
+} from 'react-router-dom'
 import axios from 'axios';
 
 function RenderError(state) {
@@ -48,7 +48,7 @@ class Login extends Component {
         error: !response.data.success
       });
       if (this.state.error === false) {
-        this.props.history.push('../../');
+        this.props.history.push('/');
       }
     }).catch(response => {
       this.setState({
@@ -90,9 +90,9 @@ class Login extends Component {
         <footer className="mdl-mini-footer">
           <div className="mdl-mini-footer__middle-section">
             <ul className="mdl-mini-footer__link-list">
-              <li><a href='/'>Home</a></li>
-              <li><a href='accounts/recover/'>Recover</a></li>
-              <li><a href='accounts/register/'>Register</a></li>
+              <li><Link to='/'>Home</Link></li>
+              <li><Link to='accounts/recover/'>Recover</Link></li>
+              <li><Link to='accounts/register/'>Register</Link></li>
             </ul>
           </div>
         </footer>
@@ -101,4 +101,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+export default Login;

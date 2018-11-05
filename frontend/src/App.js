@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 import Home from './views/Home';
 import Login from './views/Login';
 
@@ -8,7 +8,6 @@ const App = () => (
     <Switch>
       <Route exact path='/' component={Home}/>
       <Route exact path='/accounts/login' component={Login}/>
-      {/* <Route path='/schedule' component={Schedule}/> */}
     </Switch>
   </div>
 )

@@ -91,9 +91,9 @@ def format_request(req_string):
     return request_list
 
 
-def execute_request(features, req_data, local, request):
+def execute_request(features, req_data, local, request, key=None):
     response = load_weather_data(features, local,
-                                 request.user.profile.wunderground)
+                                 key)
     if 'error' in response:
         return response
     data = dict()
@@ -106,21 +106,22 @@ def execute_request(features, req_data, local, request):
 
 
 @csrf_exempt
-@login_required
 def weather(request):
     features = request.GET.get(
         'feature', 'conditions,forecast10day,hourly10day,astronomy').split(',')
     req_data = format_request(
         request.GET.get('data',
                         'conditions,forecast10day,hourly10day,astronomy'))
-    local = location.location(request.user.profile.location,
-                              request.user.profile.google)
-    return JsonResponse(execute_request(features, req_data, local, request))
+    google = request.GET.get('google', '')
+    key = request.GET.get('key', '')
+    local = location.location("", google)
+    return JsonResponse(execute_request(features, req_data, local, request, key))
 
 
 @csrf_exempt
 @login_required
 def weather_hourly(request):
+    print(request)
     features = ['hourly10day']
     req_data = [(('hourly', 'hourly10day'),
                  [('time', 'FCTTIME.civil'), ('day', 'FCTTIME.weekday_name'),
@@ -128,13 +129,19 @@ def weather_hourly(request):
                   ('fahrenheit', 'temp.english'), ('celsius', 'temp.metric'),
                   ('sky', 'sky'), ('humidity', 'humidity'), ('percip',
                                                              'pop')])]
-    local = location.location(request.user.profile.location,
-                              request.user.profile.google)
-    return JsonResponse(execute_request(features, req_data, local, request))
+    # google = request.GET.get('google', '')
+    # key = request.GET.get('key', '')
+    google = request.user.profile.google
+    key =    request.user.profile.wunderground
+    local = location.location(request.user.profile.location, google)
+    return JsonResponse(execute_request(features, req_data, local, request, key))
+    # local = location.location(request.user.profile.location,
+    #                           request.user.profile.google)
+    # return JsonResponse(execute_request(features, req_data, local, request))
 
 
-@csrf_exempt
 @login_required
+@csrf_exempt
 def weather_conditions(request):
     features = ['conditions']
     req_data = [(('conditions', 'conditions'),
@@ -145,16 +152,23 @@ def weather_conditions(request):
                   ('wind_kph', 'wind_kph'), ('visibility_mi', 'visibility_mi'),
                   ('visibility_km', 'visibility_km'), ('uv', 'UV'), ('icon',
                                                                      'icon')])]
-    local = location.location(request.user.profile.location,
-                              request.user.profile.google)
-    return JsonResponse(execute_request(features, req_data, local, request))
+    google = request.GET.get('google', '')
+    key = request.user.profile.wundergound
+    local = location.location(request.user.profile.location, google)
+    return JsonResponse(execute_request(features, req_data, local, request, key))
+    # local = location.location(request.user.profile.location,
+    #                           request.user.profile.google)
+    # return JsonResponse(execute_request(features, req_data, local, request))
 
 
 @csrf_exempt
-@login_required
 def weather_astonomy(request):
     features = ['astronomy']
     req_data = [(('astronomy', 'astronomy'), [])]
-    local = location.location(request.user.profile.location,
-                              request.user.profile.google)
-    return JsonResponse(execute_request(features, req_data, local, request))
+    google = request.GET.get('google', '')
+    key = request.GET.get('key', '')
+    local = location.location("", google)
+    return JsonResponse(execute_request(features, req_data, local, request, key))
+    # local = location.location(request.user.profile.location,
+    #                           request.user.profile.google)
+    # return JsonResponse(execute_request(features, req_data, local, request))
