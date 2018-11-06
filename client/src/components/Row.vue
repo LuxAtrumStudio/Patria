@@ -1,0 +1,14 @@
+<template>
+  <div class="columns">
+    <div class="column">
+      Hello World!
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+
+@Component
+export default class Home extends Vue {}
+</script>

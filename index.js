@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config()
 
+var path = require('path');
+
 var cookieParser = require('cookie-parser');
 var formParser = require('express-form-data');
 var session = require('cookie-session');
@@ -29,9 +31,11 @@ app.use(session({
   saveUnininitializes: true
 }));
 app.use(cors({
-  origin: 'http://localhost:8000',
+  origin: 'http://localhost:8080',
   credentials: true
 }));
+
+app.use(express.static(path.join(__dirname, 'client/dist')));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -43,8 +47,12 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, '\033[1;33m[mongodb]\033[0m '));
 
 app.use('/api/', apiRouter);
+app.get('*', (req, res) => {
+  console.log('\033[1;34m[router] GET \'/*\'\033[0m');
+  res.sendFile(path.join(__dirname, "client/dist/index.html"));
+});
 
-const port = process.env.PORT | 8080;
+const port = process.env.PORT | 8000;
 
 console.log("\033[1;36m[express] Listening on port", port, "\033[0m");
 

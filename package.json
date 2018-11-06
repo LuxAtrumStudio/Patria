@@ -7,9 +7,12 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "serve": "nodemon index.js"
+    "serve": "nodemon index.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn serve\" \"cd client && yarn serve\"",
+    "build": "cd client && yarn build"
   },
   "dependencies": {
+    "concurrently": "^4.0.1",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.5",
