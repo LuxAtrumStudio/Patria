@@ -5,16 +5,26 @@
         <div class="navbar-item">
           {{ time }}
         </div>
-        <router-link class="navbar-item is-hidden-desktop" to="/settings">
+        <router-link class="navbar-item is-hidden-desktop" to="/settings/general" v-if="$route.path === '/'">
           <span class="icon">
             <i class="fas fa-cog" />
           </span>
         </router-link>
+        <router-link class="navbar-item is-hidden-desktop" to="/" v-if="$route.path.startsWith('/settings')">
+          <span class="icon">
+            <i class="fas fa-home" />
+          </span>
+        </router-link>
       </div>
       <div class="navbar-end">
-        <router-link class="navbar-item is-hidden-touch" to="/settings">
+        <router-link class="navbar-item is-hidden-touch" to="/settings/general" v-if="$route.path === '/'">
           <span class="icon">
             <i class="fas fa-cog" />
+          </span>
+        </router-link>
+        <router-link class="navbar-item is-hidden-touch" to="/" v-if="$route.path.startsWith('/settings')">
+          <span class="icon">
+            <i class="fas fa-home" />
           </span>
         </router-link>
       </div>

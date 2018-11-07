@@ -97,9 +97,9 @@ router.get('/auth/login', passport.authenticate('google', {
   scope: ['https://www.googleapis.com/auth/plus.login']
 }));
 router.get('/auth/callback', passport.authenticate('google', {
-  failureRedirect: '/login'
+  failureRedirect: process.env.FRONTEND + '/'
 }), (req, res) => {
-  res.redirect('/');
+  res.redirect(process.env.FRONTEND + '/');
 });
 router.get('/auth/logout', (req, res) => {
   console.log('\033[1;34m[router] GET \'/api/auth/logout\'\033[0m');
